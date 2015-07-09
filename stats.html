@@ -32,7 +32,9 @@
     .x.axis path {
       display: none;
     }
-    
+    .inner {
+        max-width: 940px;
+    }
     body {
         background-color: #f2f2f2;
     }
@@ -57,7 +59,19 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h3>
-<a id="welcome-to-tpn-reporsitory-page" class="anchor" href="#welcome-to-tpn-reporsitory-page" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to TPN-Reporsitory Page.</h3>
+<a id="welcome-to-tpn-reporsitory-page" class="anchor" href="#welcome-to-tpn-reporsitory-page" aria-hidden="true"><span class="octicon octicon-link"></span></a>In the last 12 months(starting from June 2014), TPN Wellington held 7 public talk event, the attendance (based on records in Meetup.com) are as follows: </h3>
+
+<div class="chart">
+</div>
+<table> 
+    <th>Attendance times</th><th> audiences' number</th>
+    <tr><td>1</td><td>58</td></tr>
+    <tr><td>2</td><td>20</td></tr>
+    <tr><td>3</td><td>17</td></tr>
+    <tr><td>4</td><td>5</td></tr>
+    <tr><td>5</td><td>4</td></tr>
+    
+</table>              
           
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
@@ -90,9 +104,9 @@ var yAxis = d3.svg.axis()
     .orient("left")
     .ticks(10, "");
 
-d3.select("body").append("div");    
+d3.select(".chart").insert("div");
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select(".chart").insert("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
@@ -147,8 +161,8 @@ var svg = d3.select("body").append("svg")
 	width = 400 - margin.left - margin.right;
 	height = 300 - margin.top - margin.bottom;
 
-var chart = d3.select("body")
-				.append('svg')
+var chart = d3.select(".chart")
+				.insert('svg')
 			    .attr("width", width + margin.left + margin.right)
 			    .attr("height", height + margin.top)
 			   .append("g")
@@ -191,9 +205,13 @@ g.append("path")
            d.endAngle = i(t);
          return arc(d);
        }
+  })
+  .each("end", function(){
+        console.log("changing...");
+        section_colors = ["rgb(51, 46, 46)", "rgb(131, 127, 126)", "rgb(209, 198, 195)"];
   });
-    
-  section_colors = ["rgb(51, 46, 46)", "rgb(131, 127, 126)", "rgb(209, 198, 195)"];
+    section_colors = ["rgb(51, 46, 46)", "rgb(131, 127, 126)", "rgb(209, 198, 195)"];
+  //section_colors = ["rgb(51, 46, 46)", "rgb(131, 127, 126)", "rgb(209, 198, 195)"];
 //  margin.top = 70;
 //  margin.bottom = 70;
   width = 250;  
