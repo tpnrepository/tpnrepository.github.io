@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>      
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="tpnreporsitory.GitHub.io : ">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <style>
+
+    .bar {
+      fill: steelblue;
+    }
+
+    .bar:hover {
+      fill: brown;
+    }
+
+    .axis {
+      font: 10px sans-serif;
+    }
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+
+    .x.axis path {
+      display: none;
+    }
+
+    </style>
+
+    <title>tpnreporsitory.GitHub.io</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="http://www.meetup.com/Test-Professionals-Network-Wellington/">View on Meetup</a>
+          <h1 id="project_title">tpnreporsitory.GitHub.io</h1>
+          <h2 id="project_tagline"></h2>
+
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h3>
+<a id="welcome-to-tpn-reporsitory-page" class="anchor" href="#welcome-to-tpn-reporsitory-page" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to TPN-Reporsitory Page.</h3>
+          
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+
+<script>
+
+    margin = {top: 20, right: 20, bottom: 30, left: 80},
+    width = 460 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+
+
+
+
+var section_colors = ["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"];
+var handler = function(error, data) {
+  if (error) throw error;
+
+    var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .ticks(10, "");
+
+d3.select("body").append("div");    
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
+  x.domain(data.map(function(d) { return d.label; }));
+  y.domain([0, d3.max(data, function(d) { return d.value; })]);
+    data.forEach(function(d, index) {
+        d.color = section_colors[index];
+      });
+    
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", -40)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("attendance (past 7 events)");
+
+  svg.selectAll(".bar")
+      .data(data)
+    .enter().append("rect")
+      //.style("fill", function(d) { return d.color; })
+    .style("fill", function(d) { return d.color; })
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.label); })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(0); })
+      .attr("height", function(d) { return 0; })
+        .transition()
+        .delay(function (d, i) { return i*180; })
+      .attr("y", function(d) { return y(d.value); })
+      .attr("height", function(d) { return height - y(d.value); });
+    
+
+    
+//var data = [ {name: "one", value: 375},
+//			{name: "two", value:  615},
+//			{name: "three", value:  832} ];
+    
+//			{name: "four", value:  516},
+//			{name: "five", value:  491} ];
+
+
+	width = 400 - margin.left - margin.right;
+	height = 300 - margin.top - margin.bottom;
+
+var chart = d3.select("body")
+				.append('svg')
+			    .attr("width", width + margin.left + margin.right)
+			    .attr("height", height + margin.top)
+			   .append("g")
+    			.attr("transform", "translate(" + (width/2) + "," + ((height/2)+margin.top) + ")");
+
+
+var radius = Math.min(width, height) / 3;
+
+//var key = function(d){ return d.data.label; };
+//console.log(data.map(function(d) { return d.label; }));
+    
+var color = d3.scale.ordinal()
+.domain(data.map(function(d) { return d.label; }))
+.range(data.map(function(d) { return d.color; }));
+//    .domain(["Occasional(#=1)", "Others", "Patron(almost every time)", "--", "--"])
+//	.range(["#3399FF", "#5DAEF8", "#86C3FA", "#ADD6FB", "#D6EBFD"]);
+
+var arc = d3.svg.arc()
+    .outerRadius(radius)
+    .innerRadius(radius/2+10);
+
+var pie = d3.layout.pie()
+    .sort(null)
+    .startAngle(1.1*Math.PI)
+    .endAngle(3.1*Math.PI)
+    .value(function(d) { return d.value; });
+
+
+var g = chart.selectAll(".arc")
+  .data(pie(data))
+.enter().append("g")
+  .attr("class", "arc");
+
+g.append("path")
+  .style("fill", function(d, i) { return section_colors[i]; })
+  .transition().delay(function(d, i) { return i * 300; }).duration(400)
+  .attrTween('d', function(d) {
+       var i = d3.interpolate(d.startAngle+0.1, d.endAngle);
+       return function(t) {
+           d.endAngle = i(t);
+         return arc(d);
+       }
+  });
+    
+  section_colors = ["rgb(51, 46, 46)", "rgb(131, 127, 126)", "rgb(209, 198, 195)"];
+//  margin.top = 70;
+//  margin.bottom = 70;
+  width = 250;  
+    
+}
+    
+d3.tsv("data.tsv", type, handler
+);
+
+    
+d3.tsv("data2.tsv", type, handler
+);    
+//d3.tsv("data2.tsv", type, handler
+//);
+    
+function type(d) {
+  d.value = +d.value;
+  return d;
+}
+
+</script>
+</body>
